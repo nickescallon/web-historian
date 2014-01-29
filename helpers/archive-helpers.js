@@ -26,16 +26,24 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
+var memStore = {}; //Object that gets populated on readListofUrls
+
 exports.readListOfUrls = function(){
   fs.readFile(exports.paths.list, 'utf8', function(err, data){
     if (err){
       throw err;
     }
-    console.log(data);
+    var dataArray = data.split('\n');
+    for (var i =0; i<dataArray.length; i++){
+      if (memStore[dataArray[i]] === undefined){
+        memStore[dataArray[i]] = dataArray[i];
+      }
+    }
   });
 };
 
 exports.isUrlInList = function(){
+  console.log(memStore);
 };
 
 exports.addUrlToList = function(){
