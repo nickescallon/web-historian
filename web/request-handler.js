@@ -4,19 +4,30 @@ var helpers = require('./http-helpers');
 var url = require('url');
 // require more modules/folders here!
 var isWww = /^\/www\./;
+var notYet = "This site has not yet been archived. Archiving..."
 
 exports.handleRequest = function (req, res) {
   var parsedUrl = url.parse(req.url);
   //console.log(parsedUrl);
 
 
-  //need to check the parsed URL against the sites.txt file
-  // archive.isUrlInList();
-  // archive.readListOfUrls();
-  // archive.isUrlInList();
 
   if (isWww.test(parsedUrl.path)){
-    helpers.sendResponse(res, 'site check working');
+    //check to see if URI is in memStore
+
+    var unSlashed = parsedUrl.path.match(/www.*.com/);
+    archive.readListOfUrls();
+    if (archive.isUrlInList(unSlashed)){
+      //serve up archived page 
+      helpers.serveAssets(res, unSlashed, 'archivedSites');
+
+    }else{
+      helpers.sendResponse(res, notYet, 200);
+      //archive page;
+    }
+
+
+    //helpers.sendResponse(res, 'site check working');
 
   } else if (parsedUrl.path === '/'){
     //return the rendered index.html file
@@ -33,9 +44,5 @@ exports.handleRequest = function (req, res) {
    
 
 
-
-
-  // res.writeHead(200, helpers.headers);
-  // res.end(archive.paths.list);
 };
 

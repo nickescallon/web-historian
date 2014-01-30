@@ -42,8 +42,13 @@ exports.readListOfUrls = function(){
   });
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(site){
+  var found = false;
+  if (memStore[site] !== undefined){
+    found = true;
+  }
   console.log(memStore);
+  return found;
 };
 
 exports.addUrlToList = function(){
