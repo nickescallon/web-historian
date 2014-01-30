@@ -27,7 +27,11 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-var memStore = {}; //Object that gets populated on readListofUrls
+memStore = {}; //Object that gets populated on readListofUrls
+
+exports.getMem = function(){
+  return memStore;
+}
 
 exports.readListOfUrls = function(){
   fs.readFile(exports.paths.list, 'utf8', function(err, data){
@@ -40,7 +44,6 @@ exports.readListOfUrls = function(){
         memStore[dataArray[i]] = dataArray[i];
       }
     }
-    return dataArray;
   });
 };
 
