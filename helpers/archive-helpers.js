@@ -1,4 +1,5 @@
 var fs = require('fs');
+var http = require('http');
 var path = require('path');
 
 /* You will need to reuse the same paths many times over in the course of this sprint.
@@ -47,16 +48,53 @@ exports.isUrlInList = function(site){
   if (memStore[site] !== undefined){
     found = true;
   }
-  console.log(memStore);
   return found;
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url){
+  if (memStore[url] === undefined){ //maybe redundant?
+    fs.appendFile(exports.paths.list, (url + '\n'), function(){
+      memStore[url] = url;
+    });
+  }
 };
 
-exports.isURLArchived = function(){
+exports.isURLArchived = function(site){
+  var found = false;
+  var file = exports.paths.archivedSites + '/' + site;
+  fs.existsSync(file) ? found = true : console.log('not found');
+
+  return found;
 };
 
-exports.downloadUrls = function(){
+exports.downloadUrls = function(url){
+  var options = {
+    host: url,
+    port: 80,
+    path: '/',
+    method: 'GET'
+  };
+
+  var dataString = '';
+
+  http.get(options, function(res){
+    res.on('data', function(chunk){
+      dataString += chunk;
+      //console.log(chunk);
+    });
+
+    res.on('end', function(){
+      //console.log(dataString);
+      //WRITE TO FILE
+      var path = exports.paths.archivedSites + '/' + url;
+      fs.writeFile(path, dataString, function(err){
+        if (err){
+          throw err;
+        }
+        console.log('FILE DOWNLOADED');
+      });
+    });
+  });
+
 };
 

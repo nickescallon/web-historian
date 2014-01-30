@@ -11,11 +11,15 @@ exports.headers = headers = {
 };
 
 exports.serveAssets = function(res, asset, path) {
-  // Write some code here that helps serve up your static files!
-  // (Static files are things like html (yours or archived from others...), css, or anything that doesn't change often.)
-  path = archive.paths[path]+'/' || archive.paths.siteAssets;
-  console.log(path);
+  
+/*--------------------SETS PATH------------------------*/
+  if (path === undefined){
+    path = archive.paths.siteAssets;
+  } else {
+    path = archive.paths[path] + '/';
+  }
 
+/*---------------READS FILE, SENDS RESPONSE-------------*/
   var filePath = path + asset;
   fs.readFile(filePath, function(err, data){
   	if (err){
