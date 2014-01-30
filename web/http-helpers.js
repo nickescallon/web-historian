@@ -34,7 +34,13 @@ exports.serveAssets = function(res, asset, path) {
 
 exports.sendResponse = function(res, object, status){
   status = status || 200;
+  //these next lines arent working? test with actual post
+
+  if (status === 302){
+    var redirect = archive.isURLArchived(object) ? object : '/loading.html';
+    res.setHeader("Location", redirect);
+  }
 
   res.writeHead(status, exports.headers);
   res.end(object);
-}
+};

@@ -40,6 +40,7 @@ exports.readListOfUrls = function(){
         memStore[dataArray[i]] = dataArray[i];
       }
     }
+    return dataArray;
   });
 };
 
